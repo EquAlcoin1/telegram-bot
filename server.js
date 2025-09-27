@@ -101,10 +101,11 @@ app.get("/api/balance", (req, res) => {
 app.use(express.static(path.join(__dirname, "frontend")));
 
 // ====== استارت سرور ======
-const PORT = process.env.PORT || 10000;
+const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`✅ Server running on http://localhost:${PORT} (PORT=${PORT})`);
   console.log("🤖 Bot started (polling) ...");
 });
+
 
 
