@@ -58,7 +58,7 @@ bot.onText(/\/start(?:\s+(\d+))?/, (msg, match) => {
   }
 
   const inviteLink = `https://t.me/${BOT_USERNAME}?start=${chatId}`;
-  const webLink = `${WEBAPP_URL}/index.html?userId=${chatId}`;
+  const webLink =`${WEBAPP_URL}/?userId=${chatId}`;
 
   // متن پیام + دکمه URL برای باز کردن وب‌اپ
   const text = `سلام ${msg.chat.first_name || ''}! 👋\nتو الان ${users[chatId].coins} کوین داری.\n\nلینک دعوت اختصاصی تو:\n${inviteLink}\n\nبرای دیدن کیف‌پول و تکسک‌ها وب‌اپ رو باز کن:`;
@@ -106,6 +106,7 @@ app.listen(PORT, () => {
   console.log(`✅ Server running on http://localhost:${PORT} (PORT=${PORT})`);
   console.log("🤖 Bot started (polling) ...");
 });
+
 
 
 
