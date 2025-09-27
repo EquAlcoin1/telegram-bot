@@ -11,7 +11,7 @@ app.use(bodyParser.json());
 // ====== تنظیمات از متغیرهای محیطی ======
 const TOKEN = process.env.TOKEN || "8032373080:AAEXxhTJL7EXyNbamzSvRQXAcMfXdKMtnDw"; // توکن ربات (از BotFather)
 const BOT_USERNAME = process.env.BOT_USERNAME || "EquAl_coin_Bot"; // یوزرنیم ربات بدون @
-const WEBAPP_URL = process.env.WEBAPP_URL || "http://localhost:3000"; // آدرس عمومی وب‌اپ
+const WEBAPP_URL = process.env.WEBAPP_URL || "https://telegram-bot-u18i.onrender.com"; // آدرس عمومی وب‌اپ
 const CHANNEL_USERNAME = process.env.CHANNEL_USERNAME || "@Livetrad1"; // یوزرنیم کانال (با @)
 
 // اطمینان از توکن
@@ -101,8 +101,9 @@ app.get("/api/balance", (req, res) => {
 app.use(express.static(path.join(__dirname, "frontend")));
 
 // ====== استارت سرور ======
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 10000;
 app.listen(PORT, () => {
-  console.log(`✅ Server running on http://localhost:${PORT} (PORT=${PORT})`);
+  console.log(`✅ Server running on http://localhost:${10000} (PORT=${10000})`);
   console.log("🤖 Bot started (polling) ...");
 });
+
