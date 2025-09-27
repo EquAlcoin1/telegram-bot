@@ -1,0 +1,188 @@
+/* پایه و پس‌زمینه مشکی-بنفش */
+* {
+  box-sizing: border-box;
+}
+html, body {
+  height: 100%;
+}
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  background: linear-gradient(180deg, #1a1a1a 0%, #2e003e 100%);
+  color: #f5f5f5;
+}
+
+/* ظرف اصلی موبایلی */
+.app {
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+/* هر صفحه */
+.screen {
+  flex: 1;
+  max-width: 480px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 16px 16px 96px; /* فضای منوی پایین */
+}
+.hidden {
+  display: none;
+}
+
+/* تیترها */
+.title {
+  margin: 6px 0 8px;
+  text-align: center;
+  font-size: 22px;
+  font-weight: 800;
+  letter-spacing: 0.3px;
+}
+.subtitle {
+  margin: 0 0 14px;
+  text-align: center;
+  font-size: 13px;
+  color: #b084f5;
+}
+
+/* دایره کوین */
+.coin-wrap {
+  display: flex;
+  justify-content: center;
+  margin-top: 10px;
+}
+.coin-circle {
+  position: relative;
+  width: 220px;
+  height: 220px;
+  border-radius: 50%;
+  background: conic-gradient(#8a2be2 0%, #3d0a64 0%);
+  border: 8px solid rgba(138,43,226,0.2);
+  box-shadow: 0 10px 28px rgba(138,43,226,0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.coin-value {
+  font-size: 36px;
+  font-weight: 900;
+  color: #fff;
+}
+
+/* بخش Tasks */
+.section-title {
+  margin: 22px 0 10px;
+  font-size: 16px;
+  font-weight: 800;
+}
+.tasks {
+  display: grid;
+  gap: 12px;
+}
+.task-card {
+  background: #2b2b2b;
+  border-radius: 14px;
+  padding: 14px;
+  box-shadow: 0 8px 22px rgba(0,0,0,0.4);
+  border: 1px solid rgba(138,43,226,0.3);
+}
+.task-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.task-title {
+  font-weight: 800;
+  font-size: 15px;
+  color: #fff;
+}
+.task-desc {
+  margin-top: 6px;
+  font-size: 13px;
+  color: #b084f5;
+}
+.task-badge {
+  background: #3d0a64;
+  color: #d3a6ff;
+  font-weight: 800;
+  padding: 6px 10px;
+  border-radius: 10px;
+  font-size: 12px;
+}
+.task-cta {
+  margin-top: 14px; /* فاصله بیشتر از متن */
+  display: block; /* مطمئن بشه زیر نوشته میاد */
+  width: 100%;
+  padding: 10px 12px;
+  background: #8a2be2;
+  border: none;
+  color: #fff;
+  border-radius: 10px;
+  font-weight: 800;
+  cursor: pointer;
+}
+.task-cta[disabled] {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* صفحه به‌زودی */
+.soon-box {
+  margin-top: 40px;
+  background: #2b2b2b;
+  border-radius: 16px;
+  padding: 24px;
+  text-align: center;
+  box-shadow: 0 10px 26px rgba(0,0,0,0.4);
+  border: 1px solid rgba(138,43,226,0.3);
+}
+.soon-title {
+  font-size: 18px;
+  font-weight: 900;
+  margin-bottom: 8px;
+  color: #fff;
+}
+.soon-sub {
+  font-size: 13px;
+  color: #b084f5;
+}
+
+/* منوی پایین داخل کادر تیره */
+.nav-wrap {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding: 10px 14px 16px;
+  background: transparent;
+}
+.nav {
+  max-width: 480px;
+  margin: 0 auto;
+  background: #2b2b2b;
+  border-radius: 16px;
+  box-shadow: 0 12px 36px rgba(0,0,0,0.5);
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  padding: 10px;
+  border: 1px solid rgba(138,43,226,0.3);
+}
+.nav-btn {
+  background: #3d0a64;
+  border: 1px solid #5d1d96;
+  color: #fff;
+  font-weight: 800;
+  border-radius: 12px;
+  padding: 12px 0;
+  cursor: pointer;
+}
+.nav-btn.equal {
+  font-size: 20px;
+}
+.nav-btn.active {
+  background: #8a2be2;
+  color: #fff;
+  border-color: #8a2be2;
+}
