@@ -97,15 +97,21 @@ app.get("/api/balance", (req, res) => {
   res.json({ ok: true, coins: users[userId]?.coins || 0, referrals: users[userId]?.referrals || [] });
 });
 
-// سرو محتوای فرانت‌اند (پوشه frontend)
+// ====== سرو فرانت‌اند ======
 app.use(express.static(__dirname));
+
+app.get("/", (req, res) => {
+  res.sendFile(path.join(__dirname, "index.html"));
+});
 
 // ====== استارت سرور ======
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
-  console.log(`✅ Server running on http://localhost:${PORT} (PORT=${PORT})`);
-  console.log("🤖 Bot started (polling) ...");
+  console.log(`✅ Server running on http://localhost:${PORT}`);
+  console.log("🤖 Bot started...");
 });
+
+
 
 
 
