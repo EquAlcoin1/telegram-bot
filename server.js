@@ -103,7 +103,8 @@ app.use(express.static(path.join(__dirname, "frontend")));
 // ====== استارت سرور ======
 const PORT = process.env.PORT || 10000;
 app.listen(PORT, () => {
-  console.log(`✅ Server running on http://localhost:${10000} (PORT=${10000})`);
+  console.log(`✅ Server running on http://localhost:${PORT} (PORT=${PORT})`);
   console.log("🤖 Bot started (polling) ...");
 });
+
 
