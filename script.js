@@ -1,29 +1,24 @@
-
-// script.js (فرانت — نسخه کامل و اصلاح‌شده)
-
 // ====== تنظیمات ======
-const API_ROOT = ''; // اگر سرور روی آدرس دیگری است اینو تغییر بده، مثلا 'http://localhost:3000'
+const API_ROOT = ''; // اگر بک‌اند روی آدرس دیگه‌ای هست، اینجا وارد کن
 
-function qs(name){
+function qs(name) {
   const u = new URL(window.location.href);
   return u.searchParams.get(name);
 }
 
-// CURRENT_USER_ID از query string
+// گرفتن userId از query string
 let CURRENT_USER_ID = qs('userId') || null;
-const INVITE_PARAM = qs('invite') || null;
 
-// ====== المان‌ها ======
+// ====== المنت‌ها ======
 const coinValueEl = document.getElementById('coinValue');
 const referralCountEl = document.getElementById('referralCount');
 const referralListDesc = document.getElementById('referralListDesc');
-
 const twitterBtn = document.getElementById('twitterBtn');
 const inviteBtn = document.getElementById('inviteBtn');
 const joinBtn = document.getElementById('joinBtn');
 const verifyJoinBtn = document.getElementById('verifyJoinBtn');
 
-// ====== صفحه‌بندی (nav) ======
+// ====== صفحه‌بندی ======
 const screens = {
   homeScreen: document.getElementById('homeScreen'),
   tasksScreen: document.getElementById('tasksScreen'),
@@ -31,131 +26,129 @@ const screens = {
 };
 const navButtons = document.querySelectorAll('.nav-btn');
 
-function showScreen(id){
+function showScreen(id) {
   Object.values(screens).forEach(s => s.classList.add('hidden'));
-  if(screens[id]) screens[id].classList.remove('hidden');
+  if (screens[id]) screens[id].classList.remove('hidden');
   navButtons.forEach(b => b.classList.toggle('active', b.getAttribute('data-target') === id));
 }
-navButtons.forEach(b => b.addEventListener('click', ()=> showScreen(b.getAttribute('data-target'))));
+navButtons.forEach(b => b.addEventListener('click', () => showScreen(b.getAttribute('data-target'))));
 showScreen('homeScreen');
 
-// ====== درخواست‌ها و بروزرسانی UI ======
-async function refresh(){
-  if(!CURRENT_USER_ID){
+// ====== بروزرسانی اطلاعات ======
+async function refresh() {
+  if (!CURRENT_USER_ID) {
     coinValueEl.textContent = '0';
-    if(referralCountEl) referralCountEl.textContent = '0';
-    if(referralListDesc) referralListDesc.textContent = 'Open the bot and click the web link to auto-fill your ID.';
+    referralCountEl.textContent = '0';
+    referralListDesc.textContent = 'Open the bot link first.';
     return;
   }
 
-  try{
+  try {
     const res = await fetch(`${API_ROOT}/api/balance?userId=${encodeURIComponent(CURRENT_USER_ID)}`);
     const j = await res.json();
-    if(j.ok){
+
+    if (j.ok) {
       coinValueEl.textContent = j.coins ?? 0;
-      if(referralCountEl) referralCountEl.textContent = (j.referrals && j.referrals.length) || 0;
-      if(referralListDesc) referralListDesc.textContent = (j.referrals && j.referrals.join(', ')) || 'No referrals yet.';
-    }else{
+      referralCountEl.textContent = (j.referrals && j.referrals.length) || 0;
+
+      // ✅ نمایش یوزرنیم یا نام تلگرام
+      if (j.referrals && j.referrals.length > 0) {
+        const names = j.referrals.map(r => {
+          if (typeof r === 'string') return r;
+          if (r.username) return '@' + r.username;
+          if (r.first_name && r.last_name) return `${r.first_name} ${r.last_name}`;
+          if (r.first_name) return r.first_name;
+          return 'Unknown';
+        });
+        referralListDesc.textContent = names.join(', ');
+      } else {
+        referralListDesc.textContent = 'No referrals yet.';
+      }
+
+    } else {
       console.warn('balance API error:', j);
     }
-  }catch(err){
+  } catch (err) {
     console.error('Failed to fetch balance:', err);
   }
 }
 
-// پذیرش دعوت (اگر لینک با ?invite باز بشه)
-(function tryAcceptInvite(){
-  const visitorId = qs('visitorId') || null;
-  if(INVITE_PARAM && visitorId){
-    fetch(`${API_ROOT}/accept-invite?invite=${encodeURIComponent(INVITE_PARAM)}&visitorId=${encodeURIComponent(visitorId)}`)
-      .then(r=>r.json())
-      .then(j=>{
-        console.log('accept-invite result:', j);
-        setTimeout(refresh, 500);
-      })
-      .catch(e=>console.error('accept-invite error:', e));
-  }
-})();
-
-// initial refresh
-refresh();
-
-// ====== توییتر: باز کن + بعد 10 ثانیه پاداش ======
-if(twitterBtn){
-  twitterBtn.addEventListener('click', ()=>{
-    setTimeout(async ()=>{
-      if(!CURRENT_USER_ID){
-        alert('Please open this web UI from the link sent by the bot so we know your userId.');
-        return;
-      }
-      try{
+// ====== دکمه توییتر ======
+if (twitterBtn) {
+  twitterBtn.addEventListener('click', () => {
+    setTimeout(async () => {
+      if (!CURRENT_USER_ID) return alert('Open bot link first.');
+      try {
         const r = await fetch(`${API_ROOT}/api/twitter-reward`, {
           method: 'POST',
-          headers: {'Content-Type':'application/json'},
+          headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ userId: CURRENT_USER_ID })
         });
         const j = await r.json();
-        if(j.ok) {
+        if (j.ok) {
           refresh();
           twitterBtn.textContent = 'Done ✅';
           twitterBtn.disabled = true;
         } else {
           alert('Twitter reward: ' + (j.message || 'error'));
         }
-      }catch(err){
-        console.error('twitter-reward error:', err);
-        alert('Failed to contact server for twitter reward.');
+      } catch (err) {
+        console.error(err);
       }
-    }, 10000); // 10s delay
+    }, 10000);
   });
 }
 
-// ====== دعوت: ساخت لینک دعوت ======
-if(inviteBtn){
-  inviteBtn.addEventListener('click', async ()=>{
-    if(!CURRENT_USER_ID) return alert('Open this page from the link sent by the bot so we know your userId.');
-    try{
+// ====== دکمه دعوت ======
+if (inviteBtn) {
+  inviteBtn.addEventListener('click', async () => {
+    if (!CURRENT_USER_ID) return alert('Open bot link first.');
+    try {
       const r = await fetch(`${API_ROOT}/api/generate-invite`, {
         method: 'POST',
-        headers: {'Content-Type':'application/json'},
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ userId: CURRENT_USER_ID })
       });
       const j = await r.json();
-      if(j.ok && j.inviteLink){
+      if (j.ok && j.inviteLink) {
         await navigator.clipboard.writeText(j.inviteLink);
         alert('Invite link copied to clipboard!');
       } else {
         alert('Failed to generate invite link.');
       }
-    }catch(err){
-      console.error('generate-invite error:', err);
-      alert('Error generating invite link.');
+    } catch (err) {
+      console.error(err);
     }
   });
 }
 
-// ====== Join channel: Verify ======
-if(verifyJoinBtn){
-  verifyJoinBtn.addEventListener('click', async ()=>{
-    if(!CURRENT_USER_ID) return alert('Open this page from the link sent by the bot so we know your userId.');
-    try{
+// ====== دکمه Verify کانال ======
+if (verifyJoinBtn) {
+  verifyJoinBtn.addEventListener('click', async () => {
+    if (!CURRENT_USER_ID) return alert('Open bot link first.');
+
+    try {
       const r = await fetch(`${API_ROOT}/api/verify-join`, {
         method: 'POST',
-        headers: {'Content-Type':'application/json'},
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ userId: CURRENT_USER_ID })
       });
       const j = await r.json();
-      if(j.ok){
-        alert('Verified — coins added.');
+
+      if (j.ok) {
+        alert('✅ Verified — coins added.');
         refresh();
         verifyJoinBtn.textContent = 'Verified ✅';
         verifyJoinBtn.disabled = true;
       } else {
-        alert('Not verified: ' + (j.message || ''));
+        alert('❌ ' + (j.message || 'Not verified.'));
       }
-    }catch(err){
+    } catch (err) {
       console.error('verify-join error:', err);
       alert('Error verifying join.');
     }
   });
 }
+
+// ====== شروع ======
+refresh();
