@@ -8,108 +8,124 @@ const TelegramBot = require("node-telegram-bot-api");
 const app = express();
 app.use(bodyParser.json());
 
-// ====== تنظیمات از متغیرهای محیطی ======
-const TOKEN = process.env.TOKEN || "8032373080:AAEXxhTJL7EXyNbamzSvRQXAcMfXdKMtnDw"; // توکن ربات (از BotFather)
-const BOT_USERNAME = process.env.BOT_USERNAME || "EquAl_coin_Bot"; // یوزرنیم ربات بدون @
-const WEBAPP_URL = process.env.WEBAPP_URL || "https://telegram-bot-u18i.onrender.com"; // آدرس عمومی وب‌اپ
-const CHANNEL_USERNAME = process.env.CHANNEL_USERNAME || "@Livetrad1"; // یوزرنیم کانال (با @)
-
-// اطمینان از توکن
-if (!TOKEN) {
-  console.error("ERROR: TOKEN environment variable is required");
-  process.exit(1);
-}
+// ====== تنظیمات ======
+const TOKEN = process.env.TOKEN || "8032373080:AAEXxhTJL7EXyNbamzSvRQXAcMfXdKMtnDw";
+const BOT_USERNAME = process.env.BOT_USERNAME || "EquAl_coin_Bot";
+const WEBAPP_URL = process.env.WEBAPP_URL || "https://telegram-bot-u18i.onrender.com";
+const CHANNEL_USERNAME = process.env.CHANNEL_USERNAME || "@Livetrad1"; // 👈 حتما با @
 
 const bot = new TelegramBot(TOKEN, { polling: true });
 
-// فایل داده محلی
+// ====== فایل داده ======
 const DATA_FILE = path.join(__dirname, "data.json");
 let users = {};
 if (fs.existsSync(DATA_FILE)) {
-  try { users = JSON.parse(fs.readFileSync(DATA_FILE)); } catch(e){ users = {}; }
+  try { users = JSON.parse(fs.readFileSync(DATA_FILE)); } catch { users = {}; }
 }
-function saveData(){ fs.writeFileSync(DATA_FILE, JSON.stringify(users, null, 2)); }
+function saveData() { fs.writeFileSync(DATA_FILE, JSON.stringify(users, null, 2)); }
 
-// کوین و رفرال
-function addCoins(userId, amount){
-  if (!users[userId]) users[userId] = { coins: 0, referrals: [] };
-  users[userId].coins += Number(amount||0);
+// ====== توابع ======
+function addCoins(userId, amount) {
+  if (!users[userId]) users[userId] = { coins: 0, referrals: [], username: "", name: "" };
+  users[userId].coins += Number(amount || 0);
   saveData();
 }
-function addReferral(inviterId, newUserId){
-  if (!users[inviterId]) users[inviterId] = { coins: 0, referrals: [] };
-  if (!users[inviterId].referrals.includes(newUserId)) {
-    users[inviterId].referrals.push(newUserId);
-    addCoins(inviterId, 3); // پاداش مستقیم
-    // اگر زیرمجموعه‌های اون تکمیل شد، پاداش اضافه
-    if (users[newUserId]?.referrals?.length >= 3) addCoins(inviterId, 4);
+
+function addReferral(inviterId, newUser) {
+  if (!users[inviterId]) users[inviterId] = { coins: 0, referrals: [], username: "", name: "" };
+
+  const displayName = newUser.username
+    ? `@${newUser.username}`
+    : (newUser.first_name || "Unknown");
+
+  if (!users[inviterId].referrals.some(r => r.id === newUser.id)) {
+    users[inviterId].referrals.push({ id: newUser.id, name: displayName });
+    addCoins(inviterId, 3); // پاداش دعوت مستقیم
   }
+
+  saveData();
 }
 
-// ====== هندل /start ======
-bot.onText(/\/start(?:\s+(\d+))?/, (msg, match) => {
+// ====== /start ======
+bot.onText(/\/start(?:\s+(\d+))?/, async (msg, match) => {
   const chatId = String(msg.chat.id);
   const inviterId = match && match[1] ? String(match[1]) : null;
 
   if (!users[chatId]) {
-    users[chatId] = { coins: 0, referrals: [] };
+    users[chatId] = {
+      coins: 0,
+      referrals: [],
+      username: msg.from.username || "",
+      name: msg.from.first_name || ""
+    };
     saveData();
-    if (inviterId && inviterId !== chatId) addReferral(inviterId, chatId);
+
+    if (inviterId && inviterId !== chatId) addReferral(inviterId, msg.from);
   }
 
   const inviteLink = `https://t.me/${BOT_USERNAME}?start=${chatId}`;
-  const webLink =`${WEBAPP_URL}/?userId=${chatId}`;
+  const webLink = `${WEBAPP_URL}/?userId=${chatId}`;
 
-  // متن پیام + دکمه URL برای باز کردن وب‌اپ
-  const text = `سلام ${msg.chat.first_name || ''}! 👋\nتو الان ${users[chatId].coins} کوین داری.\n\nلینک دعوت اختصاصی تو:\n${inviteLink}\n\nبرای دیدن کیف‌پول و تکسک‌ها وب‌اپ رو باز کن:`;
-  const opts = {
+  const text = `سلام ${msg.chat.first_name || ''}! 👋
+تو الان ${users[chatId].coins} کوین داری 💰
+
+🔗 لینک دعوت اختصاصی:
+${inviteLink}
+
+🌐 برای دیدن کیف‌پول و تسک‌ها وب‌اپ رو باز کن👇`;
+
+  bot.sendMessage(chatId, text, {
     reply_markup: {
       inline_keyboard: [
-        [{ text: "Open Web App", url: webLink }],
-        [{ text: "Click to invite", url: inviteLink }]
+        [{ text: "🚀 Open Web App", url: webLink }],
+        [{ text: "👥 Invite Friends", url: inviteLink }]
       ]
     }
-  };
-  bot.sendMessage(chatId, text, opts);
+  });
 });
 
-// ====== چک عضویت در کانال (command /check) ======
-bot.onText(/\/check/, async (msg) => {
-  const chatId = String(msg.chat.id);
+// ====== بررسی عضویت در کانال ======
+app.get("/verifyJoin", async (req, res) => {
+  const { userId } = req.query;
+  if (!userId) return res.json({ ok: false, message: "userId required" });
+
   try {
-    const member = await bot.getChatMember(CHANNEL_USERNAME, chatId);
+    const member = await bot.getChatMember(CHANNEL_USERNAME, userId);
     if (["member", "administrator", "creator"].includes(member.status)) {
-      addCoins(chatId, 5);
-      bot.sendMessage(chatId, "✅ عضو کانال هستی — 5 کوین اضافه شد!");
+      addCoins(userId, 5);
+      return res.json({ ok: true, message: "Joined! +5 coins added" });
     } else {
-      bot.sendMessage(chatId, "❌ هنوز عضو کانال نیستی.");
+      return res.json({ ok: false, message: "User not joined" });
     }
-  } catch (e) {
-    console.error(e);
-    bot.sendMessage(chatId, "⚠️ خطا در بررسی عضویت (احتمالاً یوزرنیم کانال درست نیست یا ربات دسترسی ندارد).");
+  } catch (err) {
+    console.error("verifyJoin error:", err.message);
+    return res.json({ ok: false, message: "Error verifying join" });
   }
 });
 
-// ====== API برای فرانت‌اند ======
+// ====== گرفتن اطلاعات کاربر برای وب‌اپ ======
 app.get("/api/balance", (req, res) => {
   const userId = req.query.userId;
   if (!userId) return res.json({ ok: false, message: "userId required" });
-  res.json({ ok: true, coins: users[userId]?.coins || 0, referrals: users[userId]?.referrals || [] });
+
+  const user = users[userId] || { coins: 0, referrals: [] };
+  res.json({ ok: true, coins: user.coins, referrals: user.referrals });
 });
 
-// ====== سرو فرانت‌اند ======
+// ====== سرو فایل‌های استاتیک ======
 app.use(express.static(__dirname));
 
 app.get("/", (req, res) => {
-  res.sendFile(path.join(__dirname, "index.htmL"));
+  res.sendFile(path.join(__dirname, "index.html")); // 👈 اصلاح‌شده (نه htmL)
 });
 
-// ====== استارت سرور ======
+// ====== اجرای سرور ======
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
-  console.log(`✅ Server running on http://localhost:${PORT}`);
+  console.log(`✅ Server running on port ${PORT}`);
   console.log("🤖 Bot started...");
 });
+
 
 
 
