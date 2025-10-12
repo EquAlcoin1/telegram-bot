@@ -1,5 +1,5 @@
 // ====== تنظیمات ======
-const API_ROOT = ''; // اگر بک‌اند روی آدرس دیگه‌ای هست، اینجا وارد کن
+const API_ROOT = 'https://telegram-bot-u18i.onrender.com';
 
 function qs(name) {
   const u = new URL(window.location.href);
@@ -152,3 +152,4 @@ if (verifyJoinBtn) {
 
 // ====== شروع ======
 refresh();
+
