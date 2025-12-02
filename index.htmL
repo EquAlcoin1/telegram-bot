@@ -3,19 +3,21 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>EquAL coin — Demo</title>
+  <title>EquAL coin</title>
   <link rel="stylesheet" href="style.css" />
   <script defer src="script.js"></script>
 </head>
+
 <body>
   <div class="app">
+
     <!-- صفحه خانه -->
     <main class="screen" id="homeScreen">
-      <h1 class="title">EquAL coin</h1>
+      <h1 class="title neon-title">EquAL coin</h1>
       <p class="subtitle">Max 20 Coins</p>
 
       <div class="coin-wrap">
-        <div class="coin-circle">
+        <div class="coin-circle glass-card glow-strong">
           <span class="coin-value" id="coinValue">0</span>
         </div>
       </div>
@@ -23,59 +25,64 @@
 
     <!-- صفحه تسک‌ها -->
     <main class="screen hidden" id="tasksScreen">
-      <h2 class="section-title">Tasks</h2>
+      <h2 class="section-title neon-small">Tasks</h2>
 
       <div class="tasks">
-        <!-- Follow Twitter -->
-        <article class="task-card">
+
+        <!-- Twitter -->
+        <article class="task-card glass-card glow">
           <div class="task-row">
             <div class="task-title">Follow Twitter</div>
             <div class="task-badge">+3</div>
           </div>
-          <div class="task-desc">Follow our Twitter to earn +3 coins.</div>
-          <!-- لینک توییتر خودت -->
-          <a id="twitterBtn" class="task-cta" href="https://x.com/Equalitxw?s=09" target="_blank" rel="noopener">Open</a>
+          <div class="task-desc">
+            Follow our Twitter to earn +3 coins.
+          </div>
+          <a id="twitterBtn" class="task-cta" href="https://x.com/Equalitxw?s=09" target="_blank">Open</a>
         </article>
 
-        <!-- Invite Friends -->
-        <article class="task-card">
+        <!-- Invite -->
+        <article class="task-card glass-card glow">
           <div class="task-row">
             <div class="task-title">Invite Friends</div>
             <div class="task-badge">+3</div>
           </div>
           <div class="task-desc">
-            Invite 3 friends → +3 coins. If each of them invites 3 more → +4 extra coins.
+            Invite 3 friends → +3 coins.  
+            Each friend who invites 3 more → +4 extra coins.
           </div>
-          <button id="inviteBtn" class="task-cta" type="button">Get Invite Link</button>
+          <button id="inviteBtn" class="task-cta">Get Invite Link</button>
         </article>
 
-        <!-- Join the Channel -->
-        <article class="task-card">
+        <!-- Join Channel -->
+        <article class="task-card glass-card glow">
           <div class="task-row">
             <div class="task-title">Join the Channel</div>
             <div class="task-badge">+5</div>
           </div>
           <div class="task-desc">Join our Telegram channel to earn +5 coins.</div>
-          <!-- لینک کانال تلگرام خودت -->
-          <a id="joinBtn" class="task-cta" href="https://t.me/Livetrad1" target="_blank" rel="noopener">Open Channel</a>
+
+          <a id="joinBtn" class="task-cta" href="https://t.me/Livetrad1" target="_blank">Open Channel</a>
           <button id="verifyJoinBtn" class="task-cta" style="margin-top:8px;">I joined — Verify</button>
         </article>
 
-        <!-- نمایش زیرمجموعه‌ها -->
-        <article class="task-card">
+        <!-- Referrals -->
+        <article class="task-card glass-card glow">
           <div class="task-row">
             <div class="task-title">Your Referrals</div>
             <div class="task-badge" id="referralCount">0</div>
           </div>
           <div class="task-desc" id="referralListDesc">No referrals yet.</div>
         </article>
+
       </div>
     </main>
 
     <!-- صفحه Coming Soon -->
     <main class="screen hidden" id="soonScreen">
-      <h1 class="title">Coming Soon</h1>
-      <div class="soon-box">
+      <h1 class="title neon-title">Coming Soon</h1>
+
+      <div class="soon-box glass-card glow">
         <div class="soon-title">New features are on the way</div>
         <div class="soon-sub">Stay tuned for updates and events.</div>
       </div>
@@ -83,12 +90,13 @@
 
     <!-- منوی پایین -->
     <nav class="nav-wrap">
-      <div class="nav">
+      <div class="nav glass-nav glow-soft">
         <button class="nav-btn" data-target="soonScreen">Soon</button>
         <button class="nav-btn equal active" data-target="homeScreen">=</button>
         <button class="nav-btn" data-target="tasksScreen">Tasks</button>
       </div>
     </nav>
+
   </div>
 </body>
 </html>
