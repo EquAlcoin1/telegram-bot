@@ -38,8 +38,8 @@ showScreen('homeScreen');
 async function refresh() {
   if (!CURRENT_USER_ID) {
     coinValueEl.textContent = '0';
-    referralCountEl.textContent = '0';
-    referralListDesc.textContent = 'Open the bot link first.';
+    if (referralCountEl) referralCountEl.textContent = '0';
+    if (referralListDesc) referralListDesc.textContent = 'Open the bot link first.';
     return;
   }
 
@@ -48,10 +48,18 @@ async function refresh() {
     const j = await res.json();
 
     if (j.ok) {
-      coinValueEl.textContent = j.coins ?? 0;
-      referralCountEl.textContent = (j.referrals && j.referrals.length) || 0;
+      // animate coin change subtly
+      const prev = Number(coinValueEl.textContent || 0);
+      const next = Number(j.coins || 0);
+      coinValueEl.textContent = next;
+      if (next > prev) {
+        coinValueEl.style.transform = 'scale(1.06)';
+        setTimeout(()=> coinValueEl.style.transform = '', 220);
+      }
 
-      // ✅ نمایش یوزرنیم یا نام تلگرام
+      if (referralCountEl) referralCountEl.textContent = (j.referrals && j.referrals.length) || 0;
+
+      // نمایش یوزرنیم یا نام تلگرام
       if (j.referrals && j.referrals.length > 0) {
         const names = j.referrals.map(r => {
           if (typeof r === 'string') return r;
@@ -60,9 +68,9 @@ async function refresh() {
           if (r.first_name) return r.first_name;
           return 'Unknown';
         });
-        referralListDesc.textContent = names.join(', ');
+        if (referralListDesc) referralListDesc.textContent = names.join(', ');
       } else {
-        referralListDesc.textContent = 'No referrals yet.';
+        if (referralListDesc) referralListDesc.textContent = 'No referrals yet.';
       }
 
     } else {
@@ -152,4 +160,3 @@ if (verifyJoinBtn) {
 
 // ====== شروع ======
 refresh();
-
