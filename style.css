@@ -1,120 +1,180 @@
-/* Reset & base */
+/* Redesigned EqualCoin UI — Bright, Clean, Attractive */
+
 * { box-sizing: border-box; }
-html,body { height:100%; margin:0; }
-body{
-  font-family: system-ui,-apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
-  background: linear-gradient(180deg, #09080b 0%, #13071a 100%);
-  color:#edf2ff;
-  -webkit-font-smoothing:antialiased;
-  -moz-osx-font-smoothing:grayscale;
-  padding-bottom:96px;
+html, body { height: 100%; }
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  background: radial-gradient(circle at center, #3b0066 0%, #12001f 70%, #0a0012 100%);
+  color: #ffffff;
 }
 
-/* App container */
-.app{ min-height:100%; display:flex; flex-direction:column; align-items:center; }
-
-/* Screen */
-.screen{
-  width:100%;
-  max-width:480px;
-  padding:18px 18px 110px;
-  margin:0 auto;
+/* Container */
+.app {
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
 }
-.hidden{ display:none; }
 
-/* Header / brand */
-.header{ display:flex; align-items:center; justify-content:space-between; margin-bottom:6px; }
-.brand{ display:flex; align-items:center; gap:12px; }
-.logo{
-  width:46px; height:46px; border-radius:12px;
-  background: linear-gradient(135deg,#7b61ff,#4db6ff);
-  display:flex; align-items:center; justify-content:center;
-  font-weight:900; color:#fff; font-size:20px;
-  box-shadow: 0 8px 20px rgba(77,182,255,0.08), 0 2px 6px rgba(123,97,255,0.12);
+/* Screens */
+.screen {
+  flex: 1;
+  max-width: 480px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 20px 18px 110px;
 }
-.brand-title{ font-weight:900; font-size:18px; line-height:1; color:#fff; }
-.brand-sub{ font-size:12px; color:#c8b8ff; margin-top:2px; }
+.hidden { display: none; }
 
-/* Center coin */
-.center{ display:flex; flex-direction:column; align-items:center; margin-top:6px; }
-.coin-wrap{ display:flex; justify-content:center; width:100%; }
-.coin-circle{
-  position:relative; width:220px; height:220px; border-radius:50%;
-  background: radial-gradient(circle at 30% 20%, rgba(123,97,255,0.12), rgba(77,182,255,0.04) 30%, rgba(0,0,0,0.2) 60%);
-  display:flex; align-items:center; justify-content:center;
-  box-shadow: 0 18px 40px rgba(7,5,12,0.6), inset 0 -6px 24px rgba(0,0,0,0.4);
-  border: 1px solid rgba(255,255,255,0.03);
-  overflow:visible;
+/* Titles */
+.title {
+  margin: 10px 0 8px;
+  text-align: center;
+  font-size: 24px;
+  font-weight: 800;
+  color: #e8d7ff;
 }
-.coin-ring{ position:absolute; inset:0; width:100%; height:100%; pointer-events:none; transform:rotate(-20deg); }
-.coin-inner{ display:flex; align-items:center; justify-content:center; z-index:2; width:72%; height:72%; border-radius:50%; background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01)); }
-.coin-value{ font-size:42px; font-weight:900; color:#fff; letter-spacing:0.6px; }
-
-/* small hint */
-.hint{ margin-top:12px; color:#bfc4ff; font-size:13px; text-align:center; }
-
-/* Section titles */
-.section-title{ font-size:16px; font-weight:900; margin:6px 0 8px; color:#fff; }
-
-/* Tasks list */
-.tasks{ display:grid; gap:12px; margin-top:6px; }
-
-/* Task card */
-.task-card{
-  display:block;
-  background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
-  border-radius:14px; padding:12px;
-  border: 1px solid rgba(255,255,255,0.04);
-  box-shadow: 0 8px 30px rgba(4,3,10,0.6);
-  transition: transform .18s ease, box-shadow .18s ease;
+.subtitle {
+  text-align: center;
+  font-size: 14px;
+  color: #c49bff;
 }
-.task-card:hover{ transform: translateY(-6px); box-shadow: 0 18px 40px rgba(6,5,18,0.7); }
 
-/* Task row layout */
-.task-row{ display:flex; align-items:center; justify-content:space-between; gap:12px; }
-.task-left{ display:flex; gap:12px; align-items:center; max-width:72%; }
-.task-icon{ width:46px; height:46px; border-radius:10px; display:flex; align-items:center; justify-content:center; background:linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.02)); border:1px solid rgba(255,255,255,0.03); box-shadow: inset 0 -6px 20px rgba(0,0,0,0.4); }
-.task-icon svg{ width:20px; height:20px; fill:#dbe7ff; opacity:0.95; }
-
-/* task meta */
-.task-meta{ min-width:0; }
-.task-title{ font-weight:900; font-size:15px; color:#fff; }
-.task-desc{ margin-top:6px; font-size:13px; color:#bfc4ff; }
-
-/* badge */
-.task-badge{ background: linear-gradient(135deg,#4528a8,#7b61ff); color:#fff; font-weight:900; padding:6px 12px; border-radius:10px; font-size:12px; box-shadow: 0 8px 18px rgba(123,97,255,0.08); }
-
-/* CTA buttons */
-.task-cta{
-  display:inline-block; width:100%; margin-top:12px; padding:12px 14px; border-radius:12px;
-  background: linear-gradient(90deg,#4db6ff,#7b61ff); color:#fff; font-weight:900; text-align:center; border:none; cursor:pointer;
-  transition: transform .14s ease, box-shadow .14s ease, opacity .14s ease;
-  box-shadow: 0 10px 26px rgba(77,182,255,0.08);
+/* Coin Circle */
+.coin-wrap {
+  display: flex;
+  justify-content: center;
+  margin-top: 18px;
 }
-.task-cta:hover{ transform: translateY(-3px); box-shadow: 0 18px 40px rgba(77,182,255,0.12); }
-.task-cta.outline{ background:transparent; border:1px solid rgba(255,255,255,0.06); color:#e6f3ff; }
+.coin-circle {
+  width: 230px;
+  height: 230px;
+  border-radius: 50%;
+  background: radial-gradient(circle, #7b23ff 0%, #4b018a 65%, #2b004f 100%);
+  border: 6px solid rgba(255,255,255,0.08);
+  box-shadow: 0 0 35px rgba(129,0,255,0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.coin-value {
+  font-size: 42px;
+  font-weight: 900;
+  color: #fff;
+  text-shadow: 0 0 10px rgba(255,255,255,0.7);
+}
 
-/* two cta row */
-.two-cta{ display:flex; gap:10px; margin-top:12px; }
-.two-cta .task-cta{ width:calc(50% - 5px); }
+/* Section */
+.section-title {
+  margin: 28px 0 14px;
+  font-size: 18px;
+  font-weight: 900;
+  color: #e6caff;
+}
 
-/* referral list */
-.task-desc#referralListDesc{ word-break:break-word; color:#dbe7ff; }
+/* Tasks */
+.tasks { display: grid; gap: 14px; }
 
-/* soon box */
-.soon-box{ margin-top:20px; background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01)); padding:18px; border-radius:12px; border:1px solid rgba(255,255,255,0.03); }
+.task-card {
+  background: rgba(255,255,255,0.07);
+  border-radius: 16px;
+  padding: 16px;
+  border: 1px solid rgba(255,255,255,0.12);
+  box-shadow: 0 6px 18px rgba(0,0,0,0.5);
+  backdrop-filter: blur(6px);
+}
+.task-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.task-title {
+  font-weight: 800;
+  font-size: 15px;
+  color: #fff;
+}
+.task-desc {
+  margin-top: 6px;
+  font-size: 13px;
+  color: #d3baff;
+}
+.task-badge {
+  background: #b264ff;
+  color: #fff;
+  font-weight: 800;
+  padding: 6px 12px;
+  border-radius: 12px;
+  font-size: 12px;
+}
+.task-cta {
+  margin-top: 14px;
+  width: 100%;
+  padding: 12px;
+  background: linear-gradient(90deg, #b264ff, #7a22ff);
+  border: none;
+  color: #fff;
+  border-radius: 12px;
+  font-weight: 800;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+}
+.task-cta[disabled] {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
 
-/* nav */
-.nav-wrap{ position:fixed; left:0; right:0; bottom:8px; display:flex; justify-content:center; pointer-events:none; }
-.nav{ pointer-events:auto; width:100%; max-width:480px; background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01)); border-radius:16px; padding:10px; display:grid; grid-template-columns:repeat(3,1fr); gap:10px; border:1px solid rgba(255,255,255,0.04); box-shadow: 0 18px 40px rgba(6,5,18,0.6); }
-.nav-btn{ padding:12px 8px; border-radius:12px; background:transparent; color:#e6f3ff; font-weight:900; border:1px solid transparent; cursor:pointer; transition: all .14s ease; }
-.nav-btn.equal{ font-size:20px; }
-.nav-btn.active{ background: linear-gradient(90deg,#4db6ff,#7b61ff); color:#fff; box-shadow: 0 12px 30px rgba(77,182,255,0.08); transform:translateY(-4px); }
+/* Coming Soon */
+.soon-box {
+  margin-top: 40px;
+  background: rgba(255,255,255,0.07);
+  border-radius: 18px;
+  padding: 26px;
+  text-align: center;
+  border: 1px solid rgba(255,255,255,0.15);
+  box-shadow: 0 6px 22px rgba(0,0,0,0.5);
+  backdrop-filter: blur(6px);
+}
+.soon-title {
+  font-size: 20px;
+  font-weight: 900;
+}
+.soon-sub {
+  margin-top: 6px;
+  font-size: 14px;
+  color: #d4b7ff;
+}
 
-/* small responsive tweaks */
-@media (max-width:420px){
-  .coin-circle{ width:180px; height:180px; }
-  .coin-value{ font-size:34px; }
-  .task-icon{ width:44px; height:44px; }
-  .logo{ width:40px; height:40px; font-size:18px; }
+/* Bottom Nav */
+.nav-wrap {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding: 12px 16px 20px;
+}
+.nav {
+  max-width: 480px;
+  margin: 0 auto;
+  background: rgba(255,255,255,0.1);
+  border-radius: 20px;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.6);
+  display: grid;
+  grid-template-columns: repeat(3,1fr);
+  gap: 12px;
+  padding: 12px;
+  backdrop-filter: blur(8px);
+}
+.nav-btn {
+  background: rgba(255,255,255,0.18);
+  border: 1px solid rgba(255,255,255,0.25);
+  color: #fff;
+  font-weight: 800;
+  border-radius: 14px;
+  padding: 13px 0;
+  cursor: pointer;
+  transition: 0.2s;
+}
+.nav-btn.active {
+  background: linear-gradient(90deg, #c08bff, #8d3bff);
+  border-color: #b46aff;
 }
