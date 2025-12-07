@@ -1,180 +1,216 @@
-/* Redesigned EqualCoin UI — Bright, Clean, Attractive */
+/* ===== پایه ===== */
+* {
+  box-sizing: border-box;
+}
 
-* { box-sizing: border-box; }
-html, body { height: 100%; }
+html, body {
+  height: 100%;
+}
+
 body {
   margin: 0;
   font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-  background: radial-gradient(circle at center, #3b0066 0%, #12001f 70%, #0a0012 100%);
-  color: #ffffff;
+  background: linear-gradient(180deg, #1a0b22 0%, #2b0040 40%, #3a0060 100%);
+  color: #f5f5f5;
 }
 
-/* Container */
+/* ظرف اصلی */
 .app {
   min-height: 100%;
   display: flex;
   flex-direction: column;
 }
 
-/* Screens */
+/* صفحات */
 .screen {
   flex: 1;
   max-width: 480px;
   width: 100%;
   margin: 0 auto;
-  padding: 20px 18px 110px;
+  padding: 16px 16px 110px;
 }
-.hidden { display: none; }
 
-/* Titles */
-.title {
-  margin: 10px 0 8px;
-  text-align: center;
-  font-size: 24px;
-  font-weight: 800;
-  color: #e8d7ff;
+.hidden {
+  display: none;
 }
+
+/* ===== تایپوگرافی ===== */
+.title {
+  margin: 10px 0 6px;
+  text-align: center;
+  font-size: 26px;
+  font-weight: 900;
+}
+
 .subtitle {
+  margin: 0 0 20px;
   text-align: center;
   font-size: 14px;
-  color: #c49bff;
+  color: #caa6ff;
 }
 
-/* Coin Circle */
+/* ===== دایره کوین ===== */
 .coin-wrap {
   display: flex;
   justify-content: center;
-  margin-top: 18px;
+  margin-top: 20px;
 }
+
 .coin-circle {
   width: 230px;
   height: 230px;
   border-radius: 50%;
-  background: radial-gradient(circle, #7b23ff 0%, #4b018a 65%, #2b004f 100%);
-  border: 6px solid rgba(255,255,255,0.08);
-  box-shadow: 0 0 35px rgba(129,0,255,0.5);
+  background: radial-gradient(circle at center, #5a0089, #2b003d);
+  box-shadow: 0 0 30px rgba(150, 50, 255, 0.6);
   display: flex;
   align-items: center;
   justify-content: center;
-}
-.coin-value {
-  font-size: 42px;
-  font-weight: 900;
-  color: #fff;
-  text-shadow: 0 0 10px rgba(255,255,255,0.7);
+  border: 4px solid rgba(200, 150, 255, 0.28);
 }
 
-/* Section */
+.coin-value {
+  font-size: 40px;
+  font-weight: 900;
+  color: white;
+}
+
+/* ===== بخش تسک‌ها ===== */
 .section-title {
-  margin: 28px 0 14px;
+  margin: 10px 0 14px;
   font-size: 18px;
   font-weight: 900;
-  color: #e6caff;
 }
 
-/* Tasks */
-.tasks { display: grid; gap: 14px; }
+.tasks {
+  display: grid;
+  gap: 16px;
+}
 
 .task-card {
-  background: rgba(255,255,255,0.07);
+  background: rgba(255, 255, 255, 0.05);
   border-radius: 16px;
-  padding: 16px;
-  border: 1px solid rgba(255,255,255,0.12);
-  box-shadow: 0 6px 18px rgba(0,0,0,0.5);
-  backdrop-filter: blur(6px);
+  padding: 18px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+  border: 1px solid rgba(180, 100, 255, 0.25);
 }
+
 .task-row {
   display: flex;
-  align-items: center;
   justify-content: space-between;
+  align-items: center;
 }
+
 .task-title {
+  font-size: 16px;
   font-weight: 800;
-  font-size: 15px;
-  color: #fff;
 }
+
 .task-desc {
-  margin-top: 6px;
   font-size: 13px;
-  color: #d3baff;
+  margin-top: 6px;
+  margin-bottom: 12px;
+  color: #d3b7ff;
 }
+
+/* ===== Badge ===== */
 .task-badge {
-  background: #b264ff;
-  color: #fff;
-  font-weight: 800;
-  padding: 6px 12px;
-  border-radius: 12px;
+  background: #6000c6;
+  color: white;
+  padding: 6px 10px;
+  border-radius: 10px;
   font-size: 12px;
+  font-weight: 900;
 }
+
+/* ===== CTA Buttons ===== */
 .task-cta {
-  margin-top: 14px;
+  margin-top: 10px;
   width: 100%;
-  padding: 12px;
-  background: linear-gradient(90deg, #b264ff, #7a22ff);
-  border: none;
-  color: #fff;
+  padding: 12px 12px;
   border-radius: 12px;
-  font-weight: 800;
+  border: none;
+  background: linear-gradient(90deg, #a15cff, #7430ff);
+  color: white;
+  font-weight: 900;
+  font-size: 14px;
   cursor: pointer;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+  text-align: center;
+  transition: 0.2s;
 }
+
+.task-cta:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(120, 50, 255, 0.45);
+}
+
 .task-cta[disabled] {
-  opacity: 0.55;
+  opacity: 0.6;
   cursor: not-allowed;
 }
 
-/* Coming Soon */
+/* ===== صفحه "به زودی" ===== */
 .soon-box {
+  background: rgba(255,255,255,0.05);
+  padding: 30px;
   margin-top: 40px;
-  background: rgba(255,255,255,0.07);
-  border-radius: 18px;
-  padding: 26px;
+  border-radius: 16px;
+  border: 1px solid rgba(180, 100, 255, 0.28);
   text-align: center;
-  border: 1px solid rgba(255,255,255,0.15);
-  box-shadow: 0 6px 22px rgba(0,0,0,0.5);
-  backdrop-filter: blur(6px);
 }
+
 .soon-title {
   font-size: 20px;
   font-weight: 900;
 }
+
 .soon-sub {
   margin-top: 6px;
+  color: #d3b7ff;
   font-size: 14px;
-  color: #d4b7ff;
 }
 
-/* Bottom Nav */
+/* ===== منوی پایین ===== */
 .nav-wrap {
   position: fixed;
+  bottom: 0;
   left: 0;
   right: 0;
-  bottom: 0;
-  padding: 12px 16px 20px;
+  padding: 14px;
+  background: transparent;
 }
+
 .nav {
   max-width: 480px;
   margin: 0 auto;
-  background: rgba(255,255,255,0.1);
-  border-radius: 20px;
-  box-shadow: 0 10px 40px rgba(0,0,0,0.6);
+  background: rgba(255, 255, 255, 0.07);
+  backdrop-filter: blur(10px);
+  border-radius: 18px;
+  padding: 10px;
   display: grid;
-  grid-template-columns: repeat(3,1fr);
+  grid-template-columns: repeat(3, 1fr);
   gap: 12px;
-  padding: 12px;
-  backdrop-filter: blur(8px);
+  border: 1px solid rgba(180, 100, 255, 0.28);
+  box-shadow: 0 8px 30px rgba(0,0,0,0.5);
 }
+
 .nav-btn {
-  background: rgba(255,255,255,0.18);
-  border: 1px solid rgba(255,255,255,0.25);
-  color: #fff;
+  background: #4a0078;
+  border: 1px solid #7a23d9;
+  padding: 12px 0;
+  color: white;
+  border-radius: 12px;
+  font-size: 15px;
   font-weight: 800;
-  border-radius: 14px;
-  padding: 13px 0;
   cursor: pointer;
   transition: 0.2s;
 }
+
 .nav-btn.active {
-  background: linear-gradient(90deg, #c08bff, #8d3bff);
-  border-color: #b46aff;
+  background: #a15cff;
+  border-color: #a15cff;
+  color: white;
+}
+
+.nav-btn.equal {
+  font-size: 22px;
 }
