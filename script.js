@@ -6,8 +6,22 @@ function qs(name) {
   return u.searchParams.get(name);
 }
 
-// گرفتن userId از query string
-let CURRENT_USER_ID = qs('userId') || null;
+// ====== گرفتن userId (استاندارد تلگرام + fallback لینک) ======
+let CURRENT_USER_ID = null;
+
+// 1️⃣ گرفتن از Telegram WebApp (دکمه Start آبی)
+if (window.Telegram && window.Telegram.WebApp) {
+  const tgUser = window.Telegram.WebApp.initDataUnsafe?.user;
+  if (tgUser && tgUser.id) {
+    CURRENT_USER_ID = tgUser.id.toString();
+  }
+  window.Telegram.WebApp.ready();
+}
+
+// 2️⃣ fallback برای لینک قدیمی (?userId=)
+if (!CURRENT_USER_ID) {
+  CURRENT_USER_ID = qs('userId');
+}
 
 // ====== المنت‌ها ======
 const coinValueEl = document.getElementById('coinValue');
@@ -29,9 +43,15 @@ const navButtons = document.querySelectorAll('.nav-btn');
 function showScreen(id) {
   Object.values(screens).forEach(s => s.classList.add('hidden'));
   if (screens[id]) screens[id].classList.remove('hidden');
-  navButtons.forEach(b => b.classList.toggle('active', b.getAttribute('data-target') === id));
+  navButtons.forEach(b =>
+    b.classList.toggle('active', b.getAttribute('data-target') === id)
+  );
 }
-navButtons.forEach(b => b.addEventListener('click', () => showScreen(b.getAttribute('data-target'))));
+
+navButtons.forEach(b =>
+  b.addEventListener('click', () => showScreen(b.getAttribute('data-target')))
+);
+
 showScreen('homeScreen');
 
 // ====== بروزرسانی اطلاعات ======
@@ -44,35 +64,38 @@ async function refresh() {
   }
 
   try {
-    const res = await fetch(`${API_ROOT}/api/balance?userId=${encodeURIComponent(CURRENT_USER_ID)}`);
+    const res = await fetch(
+      `${API_ROOT}/api/balance?userId=${encodeURIComponent(CURRENT_USER_ID)}`
+    );
     const j = await res.json();
 
     if (j.ok) {
-      // animate coin change subtly
       const prev = Number(coinValueEl.textContent || 0);
       const next = Number(j.coins || 0);
       coinValueEl.textContent = next;
+
       if (next > prev) {
         coinValueEl.style.transform = 'scale(1.06)';
-        setTimeout(()=> coinValueEl.style.transform = '', 220);
+        setTimeout(() => (coinValueEl.style.transform = ''), 220);
       }
 
-      if (referralCountEl) referralCountEl.textContent = (j.referrals && j.referrals.length) || 0;
+      if (referralCountEl)
+        referralCountEl.textContent = (j.referrals && j.referrals.length) || 0;
 
-      // نمایش یوزرنیم یا نام تلگرام
       if (j.referrals && j.referrals.length > 0) {
         const names = j.referrals.map(r => {
           if (typeof r === 'string') return r;
           if (r.username) return '@' + r.username;
-          if (r.first_name && r.last_name) return `${r.first_name} ${r.last_name}`;
+          if (r.first_name && r.last_name)
+            return `${r.first_name} ${r.last_name}`;
           if (r.first_name) return r.first_name;
           return 'Unknown';
         });
         if (referralListDesc) referralListDesc.textContent = names.join(', ');
       } else {
-        if (referralListDesc) referralListDesc.textContent = 'No referrals yet.';
+        if (referralListDesc)
+          referralListDesc.textContent = 'No referrals yet.';
       }
-
     } else {
       console.warn('balance API error:', j);
     }
