@@ -9,8 +9,8 @@ const app = express();
 app.use(bodyParser.json());
 
 // ====== تنظیمات ======
-const TOKEN = "8032373080:AAFNiJowr6E9t-OmMqNFQABbbsabjA6CrAU"; // توکن ربات شما
-const BOT_USERNAME = "EquAl_coin_Bot"; // یوزرنیم ربات (بدون @)
+const TOKEN = "8273341450:AAE-Sr9YZvxip2aAYvMdAy8IUatr1qvEUJ4"; // توکن ربات شما
+const BOT_USERNAME = "EquAl_coinbot"; // یوزرنیم ربات (بدون @)
 const WEBAPP_URL = "https://telegram-bot-u18i.onrender.com"; // آدرس وب‌اپ شما
 const CHANNEL_USERNAME = "@Livetrad1"; // یوزرنیم کانال با @
 
@@ -209,4 +209,5 @@ app.listen(PORT, () => {
   console.log(`✅ Server running on http://localhost:${PORT}`);
   console.log("🤖 Bot started...");
 });
+
 
