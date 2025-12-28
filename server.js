@@ -59,48 +59,56 @@ function addReferral(inviterId, newUser) {
 }
 
 // ====== /start ======
-bot.onText(/\/start(?:\s+(\d+))?/, (msg, match) => {
-  const userId = String(msg.chat.id);
-  const inviterId = match?.[1];
 
-  ensureUser(userId);
-  users[userId].username = msg.from?.username || null;
-  users[userId].first_name = msg.from?.first_name || null;
-  users[userId].last_name = msg.from?.last_name || null;
+bot.onText(/\/start(?:\s+(\d+))?/, (msg, match) => {
+  const chatId = String(msg.chat.id);
+  const inviterId = match && match[1] ? String(match[1]) : null;
+
+  // اطمینان از وجود کاربر
+  ensureUser(chatId);
+
+  // ذخیره اطلاعات پروفایل کاربر
+  users[chatId].username = msg.from?.username || users[chatId].username || null;
+  users[chatId].first_name = msg.from?.first_name || users[chatId].first_name || null;
+  users[chatId].last_name = msg.from?.last_name || users[chatId].last_name || null;
   saveData();
 
-  if (inviterId && inviterId !== userId) {
-    addReferral(inviterId, {
-      id: userId,
+  // ثبت زیرمجموعه اگر با لینک دعوت آمده
+  if (inviterId && inviterId !== chatId) {
+    const newUserObj = {
+      id: chatId,
       username: msg.from?.username || null,
       first_name: msg.from?.first_name || null,
       last_name: msg.from?.last_name || null
-    });
+    };
+    addReferral(inviterId, newUserObj);
   }
 
-  const inviteLink = `https://t.me/${BOT_USERNAME}?start=${userId}`;
-  const webAppLink = `${WEBAPP_URL}/`;
+  const inviteLink = `https://t.me/${BOT_USERNAME}?start=${chatId}`;
+  const webLink = `${WEBAPP_URL}/`;
 
-  const text = `
-👋 Welcome to *EquAl Coin*!
+  const text = `Welcome to EquAL Coin 👋
 
-🚀 Earn coins by completing tasks  
-🤝 Invite friends and grow faster  
-💎 Early users get more rewards
+This is a community-driven project built together with YOU.
+Your activity, support, and participation shape the future of EquAL.
 
-Your current balance: *${users[userId].coins} coins*
-`;
+💰 Maximum coins you can earn from this bot: 20
 
-  bot.sendMessage(userId, text, {
-    parse_mode: "Markdown",
+Please take a moment to explore the project goals
+and complete the tasks to start earning rewards.`;
+
+  const opts = {
     reply_markup: {
       inline_keyboard: [
-        [{ text: "▶️ Start", web_app: { url: webAppLink } }],
+        [{ text: "▶ Start", web_app: { url: webLink } }],
         [{ text: "🤝 Invite Friends", url: inviteLink }]
       ]
     }
-  });
+  };
+
+  bot.sendMessage(chatId, text, opts);
 });
+
 
 // ====== VERIFY CHANNEL (API) ======
 app.post("/api/verify-join", async (req, res) => {
@@ -149,3 +157,4 @@ app.listen(PORT, () => {
   console.log("✅ Server running");
   console.log("🤖 Bot started");
 });
+
