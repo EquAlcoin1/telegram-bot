@@ -148,7 +148,7 @@ app.post("/api/generate-invite", (req, res) => {
 // ====== FRONT ======
 app.use(express.static(__dirname));
 app.get("/", (_, res) =>
-  res.sendFile(path.join(__dirname, "index.html"))
+  res.sendFile(path.join(__dirname, "index.htmL"))
 );
 
 // ====== START ======
@@ -157,4 +157,5 @@ app.listen(PORT, () => {
   console.log("✅ Server running");
   console.log("🤖 Bot started");
 });
+
 
